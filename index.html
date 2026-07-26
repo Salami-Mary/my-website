@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mary Salami — GIScience · Generative AI · Sustainability</title>
+<meta name="description" content="Mary Salami — PhD candidate in Geographic Information Science at UC Santa Barbara, working on generative AI, computational sustainability, and renewable energy." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+<style>
+  /* ─── TOKENS (mirrors naomi-nlp.github.io) ─── */
+  :root{
+    --bg:#0b0f0d; --bg-2:#0f1512; --surface:#14201b; --surface-2:#1c2b24;
+    --blue:#34b17e; --blue-light:#63d4a4; --blue-dim:#1f8a5f;
+    --cream:#eaf6ef; --cream-dim:#a9c9ba;
+    --text:#ffffff; --text-muted:#c6dcd0; --text-dim:#7c9c8a;
+    --border:rgba(52,177,126,0.13); --border-2:rgba(52,177,126,0.07);
+    --sidebar-w:280px; --radius:6px; --ease:cubic-bezier(0.16,1,0.3,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;font-size:16px;}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:400;line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .3s ease,color .3s ease;}
+  ::selection{background:var(--blue-dim);color:var(--cream);}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:2px;}
+
+  /* ─── MOBILE BAR ─── */
+  .mobile-bar{display:none;position:fixed;top:0;left:0;right:0;height:56px;background:rgba(11,15,13,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between;padding:0 20px;z-index:200;}
+  .mobile-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--blue-light);}
+  .mobile-controls{display:flex;align-items:center;gap:14px;}
+  .icon-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.2rem;line-height:1;display:flex;}
+
+  .layout{display:flex;min-height:100vh;position:relative;z-index:1;}
+
+  /* ─── SIDEBAR ─── */
+  .sidebar{width:var(--sidebar-w);flex-shrink:0;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;background:rgba(15,21,18,.85);backdrop-filter:blur(20px);border-right:1px solid var(--border);z-index:100;transition:transform .35s var(--ease),background .3s ease;}
+  .sidebar-inner{display:flex;flex-direction:column;padding:40px 28px 32px;min-height:100%;}
+  .sb-photo-wrap{width:fit-content;margin:0 auto 22px;}
+  .sb-photo-ring{width:126px;height:126px;border-radius:50%;padding:3px;background:linear-gradient(135deg,var(--blue-dim),var(--blue),var(--blue-light));box-shadow:0 6px 24px rgba(52,177,126,.2);transition:transform .4s var(--ease),box-shadow .4s ease;}
+  .sb-photo-ring:hover{transform:scale(1.04);box-shadow:0 10px 32px rgba(52,177,126,.35);}
+  .sb-photo{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:center top;display:flex;align-items:center;justify-content:center;border:3px solid var(--bg-2);background:radial-gradient(120% 120% at 30% 20%,var(--surface-2),var(--bg));font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:600;color:var(--blue-light);letter-spacing:.02em;}
+
+  .sb-identity{text-align:center;margin-bottom:24px;}
+  .sb-name{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;line-height:1.05;letter-spacing:-.02em;color:var(--cream);margin-bottom:8px;}
+  .sb-name em{font-style:normal;font-weight:700;color:var(--cream);}
+  .sb-title{font-size:.85rem;font-weight:500;color:var(--cream-dim);line-height:1.4;margin-bottom:4px;}
+  .sb-affil{font-size:.72rem;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;}
+
+  .sb-links{display:flex;flex-direction:column;gap:2px;margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--border-2);}
+  .sb-link{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:var(--radius);font-size:.85rem;color:var(--text-muted);transition:background .2s ease,color .2s ease;}
+  .sb-link:hover{background:rgba(52,177,126,.08);color:var(--blue-light);}
+  .sb-link-icon{width:18px;height:18px;color:var(--blue);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .sb-link-icon svg{width:16px;height:16px;}
+  .lbl-short{display:none;}
+
+  .sb-nav{display:flex;flex-direction:column;gap:2px;flex:1;}
+  .sb-nav-link{display:block;padding:7px 10px;border-radius:var(--radius);font-size:.9rem;color:var(--text-muted);transition:background .2s ease,color .2s ease,padding .2s ease;position:relative;}
+  .sb-nav-link::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:0;background:var(--blue);border-radius:1px;transition:height .25s ease;}
+  .sb-nav-link:hover,.sb-nav-link.active{background:rgba(52,177,126,.09);color:var(--cream);padding-left:16px;}
+  .sb-nav-link:hover::before,.sb-nav-link.active::before{height:60%;}
+  .sb-nav-link.active{color:var(--blue-light);font-weight:500;}
+
+  .sb-bottom{margin-top:28px;padding-top:20px;border-top:1px solid var(--border-2);}
+  .sb-theme{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;background:none;border:1px solid var(--border);border-radius:var(--radius);color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer;transition:border-color .2s ease,color .2s ease;}
+  .sb-theme:hover{border-color:var(--blue);color:var(--blue-light);}
+
+  /* ─── MAIN ─── */
+  .main-content{margin-left:var(--sidebar-w);flex:1;max-width:860px;padding:60px 64px 40px;}
+  .content-section{padding:56px 0;border-bottom:1px solid var(--border-2);scroll-margin-top:20px;}
+  .content-section:first-of-type{padding-top:8px;}
+  .content-section:last-of-type{border-bottom:none;}
+  .cs-heading{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:var(--cream);letter-spacing:-.01em;margin-bottom:6px;}
+  .cs-divider{width:40px;height:2px;background:var(--blue);border-radius:1px;margin-bottom:26px;}
+  .cs-subheading{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--cream);margin:34px 0 14px;}
+  .content-section p{color:var(--text-muted);font-size:1rem;line-height:1.8;margin-bottom:16px;}
+  .content-section p strong{color:var(--cream);font-weight:500;}
+  .text-link{color:var(--blue);border-bottom:1px solid rgba(52,177,126,.3);transition:color .2s ease,border-color .2s ease;}
+  .text-link:hover{color:var(--blue-light);border-color:var(--blue-light);}
+
+  .intro-meta{display:flex;flex-direction:column;gap:12px;margin:26px 0;padding:20px 24px;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius);border-left:3px solid var(--blue);}
+  .intro-meta-item{display:flex;gap:16px;font-size:.95rem;}
+  .intro-meta-label{font-weight:600;color:var(--blue);width:96px;flex-shrink:0;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;padding-top:3px;}
+  .intro-meta-item span:last-child{color:var(--text-muted);}
+
+  .intro-awards{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .award-item{display:flex;align-items:baseline;gap:12px;font-size:.95rem;color:var(--text-muted);}
+  .award-year{font-size:.78rem;font-weight:600;color:var(--blue);width:36px;flex-shrink:0;letter-spacing:.04em;}
+  .award-item strong{color:var(--cream);font-weight:500;}
+
+  /* research interests */
+  .ri-list{display:flex;flex-direction:column;margin-top:4px;}
+  .ri-item{padding:22px 0;border-bottom:1px solid var(--border-2);display:grid;grid-template-columns:150px 1fr;gap:28px;align-items:start;transition:padding-left .25s ease;}
+  .ri-item:last-child{border-bottom:none;}
+  .ri-item:hover{padding-left:6px;}
+  .ri-number{font-size:.68rem;font-weight:600;color:var(--blue);letter-spacing:.1em;opacity:.7;margin-bottom:4px;}
+  .ri-item h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--cream);line-height:1.25;transition:color .2s ease;}
+  .ri-item:hover h3{color:var(--blue-light);}
+  .ri-item p{font-size:.97rem;color:var(--text-muted);line-height:1.7;margin:0;}
+
+  /* experience */
+  .exp-list{display:flex;flex-direction:column;}
+  .exp-list>li{padding:22px 0;border-bottom:1px solid var(--border-2);}
+  .exp-list>li:last-child{border-bottom:none;}
+  .exp-header{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:4px;}
+  .exp-role{font-weight:600;color:var(--cream);font-size:1.02rem;}
+  .exp-date{font-size:.72rem;color:var(--text-dim);white-space:nowrap;}
+  .exp-org{display:block;font-size:.9rem;color:var(--blue);margin-bottom:10px;}
+  .exp-bullets{display:flex;flex-direction:column;gap:4px;padding-left:2px;}
+  .exp-bullets li{font-size:.96rem;color:var(--text-muted);line-height:1.7;padding-left:16px;position:relative;}
+  .exp-bullets li::before{content:'—';position:absolute;left:0;color:var(--blue-dim);font-size:.7rem;top:2px;}
+
+  /* publications */
+  .pub-list{display:flex;flex-direction:column;}
+  .pub-list li{padding:20px 0;border-bottom:1px solid var(--border-2);font-size:1rem;color:var(--text-muted);line-height:1.7;}
+  .pub-list li:last-child{border-bottom:none;}
+  .pub-num{font-size:.68rem;font-weight:600;color:var(--blue);letter-spacing:.08em;opacity:.7;margin-right:2px;}
+  .pub-title{font-weight:500;color:var(--cream);}
+  .pub-title-link{font-weight:500;color:var(--cream);border-bottom:1px solid rgba(52,177,126,.25);transition:color .2s ease,border-color .2s ease;}
+  .pub-title-link:hover{color:var(--blue-light);border-color:var(--blue-light);}
+  .pub-authors b{color:var(--cream);font-weight:600;}
+  .pub-venue-inline{font-style:italic;color:var(--blue);font-size:.86rem;}
+  .pub-badge{display:inline-block;font-size:.62rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);border:1px solid rgba(52,177,126,.3);border-radius:100px;padding:1px 8px;margin-left:6px;vertical-align:middle;}
+  .pub-note{font-size:.78rem;color:var(--text-dim);margin-top:18px;font-style:italic;}
+
+  /* teaching / service simple lists */
+  .simple-list{display:flex;flex-direction:column;}
+  .simple-list li{padding:12px 0;border-bottom:1px solid var(--border-2);font-size:.98rem;color:var(--text-muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .simple-list li:last-child{border-bottom:none;}
+  .simple-list .k strong{color:var(--cream);font-weight:500;}
+  .simple-list .k small{color:var(--text-dim);font-style:italic;}
+  .simple-list .v{font-size:.74rem;color:var(--text-dim);white-space:nowrap;}
+
+  .skills-inline{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+  .skill-chip{font-size:.83rem;color:var(--text-muted);background:var(--surface);border:1px solid var(--border-2);padding:4px 12px;border-radius:100px;transition:all .2s ease;}
+  .skill-chip:hover{background:rgba(52,177,126,.1);border-color:rgba(52,177,126,.3);color:var(--blue-light);}
+
+  .footer{margin-top:8px;padding-top:24px;font-size:.82rem;color:var(--text-dim);}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+
+  /* ─── LIGHT MODE ─── */
+  body.light-mode{--bg:#ffffff;--bg-2:#f5f5f5;--surface:#f0f0f0;--surface-2:#e0e0e0;--blue:#1f8a5f;--blue-light:#23a06f;--blue-dim:#0c6444;--cream:#000000;--cream-dim:#1a1a1a;--text:#000000;--text-muted:#2a2a2a;--text-dim:#555555;--border:rgba(0,0,0,.12);--border-2:rgba(0,0,0,.07);}
+  body.light-mode .sidebar{background:rgba(245,245,245,.95);border-right-color:rgba(0,0,0,.1);}
+  body.light-mode .mobile-bar{background:rgba(255,255,255,.96);border-bottom-color:rgba(0,0,0,.1);}
+  body.light-mode .sb-photo{border-color:var(--bg);}
+  body.light-mode .skill-chip{background:#e8e8e8;color:#2a2a2a;border-color:rgba(0,0,0,.1);}
+  body.light-mode .skill-chip:hover{background:rgba(18,128,90,.1);color:var(--blue);border-color:var(--blue);}
+  body.light-mode .intro-meta{background:#f0f0f0;}
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width:900px){
+    .mobile-bar{display:none;}                 /* no hamburger — show everything */
+    .layout{flex-direction:column;}
+    .sidebar{position:static;width:100%;height:auto;transform:none;overflow:visible;border-right:none;border-bottom:1px solid var(--border);}
+    .sidebar-inner{padding:32px 16px 22px;}
+    .sb-photo-ring{width:112px;height:112px;}
+    .sb-links{flex-direction:row;flex-wrap:nowrap;justify-content:center;align-items:center;gap:4px;border-bottom:none;margin-bottom:14px;padding-bottom:6px;}
+    .sb-link{width:auto;padding:6px 8px;gap:7px;font-size:.82rem;}
+    .lbl-full{display:none;} .lbl-short{display:inline;}
+    .sb-nav{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:4px;flex:none;padding-top:14px;border-top:1px solid var(--border-2);}
+    .sb-nav-link{padding:6px 12px;}
+    .sb-nav-link::before{display:none;}
+    .sb-nav-link:hover,.sb-nav-link.active{padding-left:12px;}
+    .sb-bottom{margin-top:16px;display:flex;justify-content:center;}
+    .sb-theme{width:auto;}
+    .main-content{margin-left:0;padding:12px 28px 40px;max-width:100%;}
+  }
+  @media (max-width:600px){
+    .ri-item{grid-template-columns:1fr;gap:6px;}
+    .main-content{padding:8px 20px 32px;}
+    .exp-header{gap:2px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="mobile-bar">
+  <span class="mobile-logo">Mary Salami</span>
+  <div class="mobile-controls">
+    <button class="icon-btn" id="mThemeBtn" aria-label="Toggle theme">☾</button>
+    <button class="icon-btn" id="mMenuBtn" aria-label="Open menu">☰</button>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <div class="sb-photo-wrap">
+        <div class="sb-photo-ring"><div class="sb-photo" id="avatar">MS</div></div>
+      </div>
+      <div class="sb-identity">
+        <h1 class="sb-name">Mary <em>Salami</em></h1>
+        <div class="sb-title">PhD Candidate, GIScience</div>
+        <div class="sb-affil">UC Santa Barbara</div>
+      </div>
+
+      <nav class="sb-links" aria-label="Contact">
+        <a class="sb-link" href="mailto:Marysalami@ucsb.edu">
+          <span class="sb-link-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span class="lbl-full">Marysalami [at] ucsb.edu</span><span class="lbl-short">Email</span></a>
+        <a class="sb-link" href="https://www.linkedin.com/in/marysalami/" target="_blank" rel="noopener">
+          <span class="sb-link-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C21.4 8.65 22 11 22 14.1V21h-4v-6.1c0-1.45-.03-3.3-2-3.3-2.01 0-2.32 1.57-2.32 3.2V21h-4z"/></svg></span>LinkedIn</a>
+        <a class="sb-link" href="https://github.com/Salami-Mary" target="_blank" rel="noopener">
+          <span class="sb-link-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.22-3.37-1.22-.46-1.18-1.11-1.5-1.11-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.85.09-.66.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.35 4.79-4.58 5.05.36.32.68.94.68 1.9v2.82c0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></span>GitHub</a>
+        <a class="sb-link" href="cv.pdf" target="_blank" rel="noopener">
+          <span class="sb-link-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></span><span class="lbl-full">View CV</span><span class="lbl-short">CV</span></a>
+      </nav>
+
+      <nav class="sb-nav" aria-label="Sections">
+        <a class="sb-nav-link" href="#intro">Introduction</a>
+        <a class="sb-nav-link" href="#research">Research Interests</a>
+        <a class="sb-nav-link" href="#experience">Experience</a>
+        <a class="sb-nav-link" href="#publications">Publications</a>
+        <a class="sb-nav-link" href="#teaching">Teaching</a>
+        <a class="sb-nav-link" href="#service">Service</a>
+      </nav>
+
+      <div class="sb-bottom">
+        <button class="sb-theme" id="themeBtn"><span id="themeIcon">☀</span><span id="themeLabel">Light mode</span></button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <section class="content-section reveal" id="intro">
+      <h2 class="cs-heading">Introduction</h2>
+      <div class="cs-divider"></div>
+      <p>Hi 👋 I'm <strong>Mary Salami</strong>, a PhD candidate in Geographic Information Science at the <strong>University of California, Santa Barbara</strong>. My research sits at the intersection of generative AI and computational sustainability — applying machine learning and geospatial analysis to climate mitigation and renewable energy.</p>
+      <p>Recent work includes a generative-AI tool for tracking local opposition to energy siting across U.S. counties, and spatiotemporal models of human and environmental systems. Before UCSB, I was a research scientist at <strong>Data Science Nigeria</strong>, building computer-vision and NLP datasets centered on African representation. I care about work that is technically rigorous and grounded in the places and communities it describes.</p>
+
+      <div class="intro-meta">
+        <div class="intro-meta-item"><span class="intro-meta-label">Education</span><span>PhD, GIScience — UC Santa Barbara (expected 2027) · MA, Geography — UCSB (2022)</span></div>
+        <div class="intro-meta-item"><span class="intro-meta-label">Focus</span><span>Generative AI · Computational Sustainability · Climate Mitigation · Renewable Energy</span></div>
+      </div>
+
+      <h3 class="cs-subheading">Awards &amp; Scholarships</h3>
+      <div class="intro-awards">
+        <div class="award-item"><span class="award-year">2025</span><span><strong>NSF GIScience Travel Award</strong></span></div>
+        <div class="award-item"><span class="award-year">2025</span><span><strong>African &amp; Asian Students in STEM Scholarship</strong></span></div>
+        <div class="award-item"><span class="award-year">2022</span><span><strong>Deep Learning Indaba Travel Grant</strong></span></div>
+      </div>
+    </section>
+
+    <section class="content-section reveal" id="research">
+      <h2 class="cs-heading">Research Interests</h2>
+      <div class="cs-divider"></div>
+      <div class="ri-list">
+        <div class="ri-item">
+          <div class="ri-item-header"><div class="ri-number">01</div><h3>Generative AI for Sustainability</h3></div>
+          <p>Using generative models to analyze sentiment, risk, and decision-making in climate and renewable-energy contexts.</p>
+        </div>
+        <div class="ri-item">
+          <div class="ri-item-header"><div class="ri-number">02</div><h3>Computational Sustainability</h3></div>
+          <p>Machine-learning methods for environmental systems, climate mitigation, and the energy transition.</p>
+        </div>
+        <div class="ri-item">
+          <div class="ri-item-header"><div class="ri-number">03</div><h3>Geospatial Machine Learning</h3></div>
+          <p>Spatiotemporal modeling of human and environmental movement, from wildfire response to animal behavior.</p>
+        </div>
+        <div class="ri-item">
+          <div class="ri-item-header"><div class="ri-number">04</div><h3>Renewable Energy Siting</h3></div>
+          <p>Data tools for market analysis and early risk detection in energy project siting across regions.</p>
+        </div>
+        <div class="ri-item">
+          <div class="ri-item-header"><div class="ri-number">05</div><h3>Computer Vision &amp; NLP for Representation</h3></div>
+          <p>Datasets and models that center African contexts and improve cultural representation in AI.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal" id="experience">
+      <h2 class="cs-heading">Experience</h2>
+      <div class="cs-divider"></div>
+      <ul class="exp-list">
+        <li>
+          <div class="exp-header"><span class="exp-role">Research Intern</span><span class="exp-date">Jun 2025 – Sep 2025</span></div>
+          <span class="exp-org">Engie North America</span>
+          <ul class="exp-bullets">
+            <li>Built and maintained a competitor database of renewable-energy products in ArcGIS Enterprise to improve market analysis.</li>
+            <li>Designed a generative-AI tool analyzing local opposition sentiment across U.S. counties and townships for early risk detection in siting.</li>
+          </ul>
+        </li>
+        <li>
+          <div class="exp-header"><span class="exp-role">Student Researcher</span><span class="exp-date">Sep 2022 – Mar 2025</span></div>
+          <span class="exp-org">Move Lab, UC Santa Barbara</span>
+          <ul class="exp-bullets">
+            <li>Developed and validated a hybrid HMM–LSTM model improving trajectory-segmentation accuracy for animal-behavior classification.</li>
+            <li>Modeled spatiotemporal tweet trajectories to study public movement during California wildfires, supporting disaster-response research.</li>
+          </ul>
+        </li>
+        <li>
+          <div class="exp-header"><span class="exp-role">Research Intern</span><span class="exp-date">Jun 2024 – Sep 2024</span></div>
+          <span class="exp-org">Artificial Intelligence Institute of South Carolina</span>
+          <ul class="exp-bullets">
+            <li>Implemented neurosymbolic AI techniques for anomaly detection in smart systems, improving predictive reliability.</li>
+            <li>Designed state-space models for stock-market forecasting with improved accuracy on large-scale financial datasets.</li>
+          </ul>
+        </li>
+        <li>
+          <div class="exp-header"><span class="exp-role">Summer Research Intern</span><span class="exp-date">Jun 2022 – Aug 2022</span></div>
+          <span class="exp-org">Center for Spatiotemporal Thinking, Computing &amp; Applications (STC)</span>
+          <ul class="exp-bullets">
+            <li>Evaluated Earth-based applications across multi-cloud platforms (AWS, NASA, Azure, Colab), optimizing deployment strategies.</li>
+            <li>Enhanced the Satellite2 map application and tested multi-GPU performance on IBM AC922 systems.</li>
+          </ul>
+        </li>
+        <li>
+          <div class="exp-header"><span class="exp-role">Research Scientist</span><span class="exp-date">Sep 2020 – Aug 2022</span></div>
+          <span class="exp-org">Data Science Nigeria · funded by the Bill &amp; Melinda Gates Foundation</span>
+          <ul class="exp-bullets">
+            <li>Built a GAN-based dataset of 40,000 African fashion images to strengthen computer-vision benchmarks and cultural representation.</li>
+            <li>Developed a speech-to-text model tuned for Nigerian-English intonation and medical terminology; created a YOLO-based retail-audit model for 500+ FMCG products.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="content-section reveal" id="publications">
+      <h2 class="cs-heading">Publications</h2>
+      <div class="cs-divider"></div>
+      <ul class="pub-list">
+        <li><span class="pub-num">01</span> <span class="pub-authors"><b>Salami, Mary</b>, Grace C. Wu &amp; David Lopez-Carr.</span> <span class="pub-title">Generative Artificial Intelligence in Socio-Environmental Systems.</span> <span class="pub-venue-inline">Renewable and Sustainable Energy Reviews.</span><span class="pub-badge">In review</span></li>
+        <li><span class="pub-num">02</span> <span class="pub-authors">Zifu Wang, Yun Li, Kevin Wang, Jacob Cain, <b>Salami Mary</b>, Daniel Q. Duffy, Michael M. Little &amp; Chaowei Yang.</span> <span class="pub-title">Adopting GPU Computing to Support DL-based Earth Science Applications.</span> <span class="pub-venue-inline">International Journal of Digital Earth, 2023.</span></li>
+        <li><span class="pub-num">03</span> <span class="pub-authors">C. O. Oluwadare &amp; <b>Salami Mary</b>.</span> <span class="pub-title">Comparative Analysis of Smartphones and Survey-Grade GNSS Receivers for Parcel Boundary Determination.</span> <span class="pub-venue-inline">Journal of Geoinformatics and Environmental Research, 2022.</span></li>
+        <li><span class="pub-num">04</span> <span class="pub-authors">Wuraola Fisayo Oyewusi, Olubayo Adekanmbi, Warrie Warrie, Adedayo Odukoya, Abimbola Olawale, Opeyemi Osukuade &amp; <b>Salami Mary</b>.</span> <span class="pub-title">COVNLP: A Multisource COVID-19 Dataset for Natural Language Processing.</span> <span class="pub-venue-inline">Social Impact of AI for Africa Workshop, AAAI, 2022.</span></li>
+        <li><span class="pub-num">05</span> <span class="pub-authors"><b>Salami, M.</b>, Wuraola O. &amp; Olubayo Adekanmbi.</span> <span class="pub-title">AFRIGAN: African Fashion Style Generator using Generative Adversarial Networks.</span> <span class="pub-venue-inline">Black in AI Workshop, NeurIPS, 2021.</span></li>
+        <li><span class="pub-num">06</span> <span class="pub-authors">Wuraola O., Olubayo A., Sharon I., Opeyemi O. &amp; <b>Salami Mary</b>.</span> <span class="pub-title">AFRIFASHION 1600: Contemporary African Fashion Dataset for Computer Vision.</span> <span class="pub-venue-inline">IEEE/CVF CVPR Workshops, 2021.</span></li>
+        <li><span class="pub-num">07</span> <span class="pub-authors">Wuraola O., Olubayo A., Ifeoma O., <b>Salami M.</b>, Opeyemi O., Sharon I. &amp; Vitus O.</span> <span class="pub-title">Artificial Intelligence for Pharmacovigilance in Nigerian Social Media Text.</span> <span class="pub-venue-inline">AI for Public Health Workshop, ICLR, 2021.</span></li>
+        <li><span class="pub-num">08</span> <span class="pub-authors">Wuraola O., Olubayo A., Ifeoma O., Vitus O., <b>Salami M.</b>, Opeyemi O., Sharon I. &amp; Musa.</span> <a class="pub-title-link" href="https://arxiv.org/abs/2105.00810" target="_blank" rel="noopener">NaijaNER: Comprehensive Named Entity Recognition for 5 Nigerian Languages.</a> <span class="pub-venue-inline">arXiv:2105.00810, 2021.</span></li>
+      </ul>
+      <p class="pub-note">Author names mirror the CV as listed; formatting can be standardized on request.</p>
+    </section>
+
+    <section class="content-section reveal" id="teaching">
+      <h2 class="cs-heading">Teaching</h2>
+      <div class="cs-divider"></div>
+      <ul class="simple-list">
+        <li><span class="k"><strong>Physics</strong></span><span class="v">Teaching Assistant · UCSB</span></li>
+        <li><span class="k"><strong>Maps &amp; Spatial Reasoning</strong></span><span class="v">Teaching Assistant · UCSB</span></li>
+        <li><span class="k"><strong>Technical Issues in GIS</strong></span><span class="v">Teaching Assistant · UCSB</span></li>
+        <li><span class="k"><strong>People, Place &amp; Environment</strong></span><span class="v">Teaching Assistant · UCSB</span></li>
+      </ul>
+    </section>
+
+    <section class="content-section reveal" id="service">
+      <h2 class="cs-heading">Service &amp; Community</h2>
+      <div class="cs-divider"></div>
+
+      <h3 class="cs-subheading">Organizing &amp; Leadership</h3>
+      <ul class="simple-list">
+        <li><span class="k"><strong>Workshop Organizer</strong> <small>· CLRLC–LLMs Workshop, NeurIPS</small></span><span class="v">2025 – present</span></li>
+        <li><span class="k"><strong>Ambassador</strong> <small>· Women in Data Science, Santa Barbara</small></span><span class="v">2025 – present</span></li>
+        <li><span class="k"><strong>Vice President</strong> <small>· Women in Science &amp; Technology</small></span><span class="v">2025 – present</span></li>
+        <li><span class="k"><strong>Mentor</strong> <small>· Emerging Leaders in AI, Black in AI</small></span><span class="v">2025 – present</span></li>
+        <li><span class="k"><strong>Community Lead</strong> <small>· Africa Women in GIS</small></span><span class="v">2021</span></li>
+      </ul>
+
+      <h3 class="cs-subheading">Peer Review &amp; Memberships</h3>
+      <ul class="simple-list">
+        <li><span class="k"><strong>Reviewer</strong> <small>· NeurIPS Workshops (LLM Lifecycle; ML &amp; Physical Sciences)</small></span><span class="v">2025</span></li>
+        <li><span class="k"><strong>Reviewer</strong> <small>· Deep Learning Indaba — Paper Presentation</small></span><span class="v">2025</span></li>
+        <li><span class="k"><strong>Member</strong> <small>· AAG · AAAI · ACM</small></span><span class="v">2024 – present</span></li>
+      </ul>
+
+      <h3 class="cs-subheading">Skills &amp; Tools</h3>
+      <div class="skills-inline">
+        <span class="skill-chip">Python</span><span class="skill-chip">PyTorch</span><span class="skill-chip">TensorFlow</span><span class="skill-chip">Deep Graph Library</span><span class="skill-chip">spaCy</span><span class="skill-chip">scikit-learn</span><span class="skill-chip">SQL</span><span class="skill-chip">GraphDB</span><span class="skill-chip">R</span><span class="skill-chip">Git</span><span class="skill-chip">ArcGIS</span><span class="skill-chip">QGIS</span><span class="skill-chip">JOSM</span><span class="skill-chip">Tableau</span><span class="skill-chip">ENVI</span><span class="skill-chip">ERDAS</span>
+      </div>
+
+      <p class="footer">© <span id="yr"></span> Mary Salami · Santa Barbara, CA · Marysalami [at] ucsb.edu</p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  const body = document.body;
+  const themeIcon = document.getElementById('themeIcon');
+  const themeLabel = document.getElementById('themeLabel');
+  const mIcon = document.getElementById('mThemeBtn');
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function applyTheme(light){
+    body.classList.toggle('light-mode', light);
+    themeIcon.textContent = light ? '☾' : '☀';
+    themeLabel.textContent = light ? 'Dark mode' : 'Light mode';
+    if(mIcon) mIcon.textContent = light ? '☀' : '☾';
+  }
+  applyTheme(read('theme') === 'light');
+  function toggleTheme(){ const light = !body.classList.contains('light-mode'); applyTheme(light); store('theme', light ? 'light' : 'dark'); }
+  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+  if(mIcon) mIcon.addEventListener('click', toggleTheme);
+
+  const sidebar = document.getElementById('sidebar');
+  const menuBtn = document.getElementById('mMenuBtn');
+  if(menuBtn){ menuBtn.addEventListener('click', ()=> sidebar.classList.toggle('open')); }
+  document.querySelectorAll('.sb-nav-link').forEach(l=> l.addEventListener('click', ()=> sidebar.classList.remove('open')));
+
+  const reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const ro = new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target);} }); },{threshold:.1});
+    reveals.forEach(el=>ro.observe(el));
+  } else { reveals.forEach(el=>el.classList.add('in')); }
+
+  const links = [...document.querySelectorAll('.sb-nav-link')];
+  const map = new Map(links.map(a=>[a.getAttribute('href').slice(1), a]));
+  const spy = new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ links.forEach(l=>l.classList.remove('active')); const a=map.get(e.target.id); if(a) a.classList.add('active'); } }); },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+  document.querySelectorAll('.content-section').forEach(s=>spy.observe(s));
+</script>
+</body>
+</html>
