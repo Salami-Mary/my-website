@@ -87,6 +87,9 @@
   .ri-number{font-size:.68rem;font-weight:600;color:var(--blue);letter-spacing:.1em;opacity:.7;margin-bottom:4px;}
   .ri-item h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--cream);line-height:1.25;transition:color .2s ease;}
   .ri-item:hover h3{color:var(--blue-light);}
+  .ri-list.simple .ri-item{grid-template-columns:1fr;}
+  .ri-list.simple .ri-item-header{display:flex;align-items:baseline;gap:14px;}
+  .ri-list.simple .ri-number{margin-bottom:0;}
   .ri-item p{font-size:.97rem;color:var(--text-muted);line-height:1.7;margin:0;}
 
   /* experience */
